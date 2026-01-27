@@ -10,25 +10,14 @@ interface PlayerStats {
   wins: number;
   roundsPlayed: number;
   winPercentage: number;
-  totalPoints: number;
-  racesRaced: number;
-  avgPointsPerRace: number;
-  firstPlaceRaces: number;
-  secondPlaceRaces: number;
-  thirdPlaceRaces: number;
-  podiumFinishes: number;
 }
 
-type SortKey = keyof Omit<PlayerStats, "id" | "name" | "avatarUrl">;
+type SortKey = "wins" | "roundsPlayed" | "winPercentage";
 
-const SORT_OPTIONS: { key: SortKey; label: string; description: string }[] = [
-  { key: "wins", label: "Wins", description: "Total round wins" },
-  { key: "roundsPlayed", label: "Rounds", description: "Rounds played" },
-  { key: "winPercentage", label: "Win %", description: "Win percentage" },
-  { key: "totalPoints", label: "Points", description: "Total points scored" },
-  { key: "avgPointsPerRace", label: "Avg Pts", description: "Average points per race" },
-  { key: "firstPlaceRaces", label: "1st", description: "First place race finishes" },
-  { key: "podiumFinishes", label: "Podiums", description: "Top 3 race finishes" },
+const SORT_OPTIONS: { key: SortKey; label: string }[] = [
+  { key: "wins", label: "Wins" },
+  { key: "roundsPlayed", label: "Rounds" },
+  { key: "winPercentage", label: "Win %" },
 ];
 
 export default function LeaderboardPage() {
@@ -131,13 +120,13 @@ export default function LeaderboardPage() {
               >
                 {SORT_OPTIONS.map((opt) => (
                   <option key={opt.key} value={opt.key}>
-                    {opt.label} - {opt.description}
+                    {opt.label}
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* Desktop table */}
+            {/* Table */}
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -149,10 +138,8 @@ export default function LeaderboardPage() {
                         key={opt.key}
                         onClick={() => handleSort(opt.key)}
                         className="text-right py-3 px-2 font-semibold cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                        title={opt.description}
                       >
-                        <span className="hidden sm:inline">{opt.label}</span>
-                        <span className="sm:hidden">{opt.label.slice(0, 3)}</span>
+                        {opt.label}
                         <SortIcon columnKey={opt.key} />
                       </th>
                     ))}
@@ -198,32 +185,11 @@ export default function LeaderboardPage() {
                           {player.winPercentage}%
                         </span>
                       </td>
-                      <td className="py-3 px-2 text-right tabular-nums">
-                        <span className={sortKey === "totalPoints" ? "font-bold" : ""}>
-                          {player.totalPoints}
-                        </span>
-                      </td>
-                      <td className="py-3 px-2 text-right tabular-nums">
-                        <span className={sortKey === "avgPointsPerRace" ? "font-bold" : ""}>
-                          {player.avgPointsPerRace}
-                        </span>
-                      </td>
-                      <td className="py-3 px-2 text-right tabular-nums">
-                        <span className={sortKey === "firstPlaceRaces" ? "font-bold" : ""}>
-                          {player.firstPlaceRaces}
-                        </span>
-                      </td>
-                      <td className="py-3 px-2 text-right tabular-nums">
-                        <span className={sortKey === "podiumFinishes" ? "font-bold" : ""}>
-                          {player.podiumFinishes}
-                        </span>
-                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-
           </>
         )}
       </main>
