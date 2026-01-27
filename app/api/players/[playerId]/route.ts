@@ -48,7 +48,7 @@ export async function GET(
           race: {
             include: {
               track: {
-                select: { id: true, name: true },
+                select: { id: true, name: true, imageUrl: true },
               },
               round: {
                 select: { id: true, status: true },
@@ -103,11 +103,12 @@ export async function GET(
   ).length;
 
   // Track stats - count races per track and wins per track
-  const trackStats = new Map<string, { name: string; races: number; firstPlaces: number; totalPoints: number }>();
+  const trackStats = new Map<string, { name: string; imageUrl: string | null; races: number; firstPlaces: number; totalPoints: number }>();
   for (const rr of completedRaceResults) {
     const trackId = rr.race.track.id;
     const trackName = rr.race.track.name;
-    const existing = trackStats.get(trackId) || { name: trackName, races: 0, firstPlaces: 0, totalPoints: 0 };
+    const trackImageUrl = rr.race.track.imageUrl;
+    const existing = trackStats.get(trackId) || { name: trackName, imageUrl: trackImageUrl, races: 0, firstPlaces: 0, totalPoints: 0 };
     existing.races++;
     if (rr.finishPosition === 1) existing.firstPlaces++;
     existing.totalPoints += rr.pointsAwarded ?? 0;
@@ -119,6 +120,7 @@ export async function GET(
     .map(([id, stats]) => ({
       trackId: id,
       trackName: stats.name,
+      trackImageUrl: stats.imageUrl,
       races: stats.races,
       firstPlaces: stats.firstPlaces,
       totalPoints: stats.totalPoints,

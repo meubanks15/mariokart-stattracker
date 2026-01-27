@@ -22,6 +22,7 @@ interface PlayerProfile {
   trackStats: Array<{
     trackId: string;
     trackName: string;
+    trackImageUrl: string | null;
     races: number;
     firstPlaces: number;
     totalPoints: number;
@@ -161,6 +162,11 @@ export default function PlayerProfilePage({
           </div>
         </div>
 
+        {/* Best & Worst Tracks */}
+        {player.trackStats.length >= 2 && (
+          <BestWorstTracks trackStats={player.trackStats} />
+        )}
+
         {/* Recent rounds */}
         {player.recentRounds.length > 0 && (
           <div>
@@ -242,6 +248,118 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
     <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800 text-center">
       <div className="text-2xl font-bold">{value}</div>
       <div className="text-sm text-gray-500">{label}</div>
+    </div>
+  );
+}
+
+function BestWorstTracks({
+  trackStats,
+}: {
+  trackStats: Array<{
+    trackId: string;
+    trackName: string;
+    trackImageUrl: string | null;
+    races: number;
+    avgPoints: number;
+  }>;
+}) {
+  // Only consider tracks with at least 2 races for meaningful stats
+  const qualifiedTracks = trackStats.filter((t) => t.races >= 2);
+
+  if (qualifiedTracks.length < 2) return null;
+
+  // Sort by average points
+  const sortedByAvg = [...qualifiedTracks].sort((a, b) => b.avgPoints - a.avgPoints);
+
+  const bestTracks = sortedByAvg.slice(0, 3);
+  const worstTracks = sortedByAvg.slice(-3).reverse();
+
+  return (
+    <div>
+      <h2 className="text-xl font-semibold mb-3">Best & Worst Tracks</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {/* Best Tracks */}
+        <div>
+          <h3 className="text-sm font-medium text-green-600 dark:text-green-400 mb-2">Best Tracks</h3>
+          <div className="space-y-2">
+            {bestTracks.map((track, index) => (
+              <TrackCard
+                key={track.trackId}
+                track={track}
+                rank={index + 1}
+                variant="best"
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Worst Tracks */}
+        <div>
+          <h3 className="text-sm font-medium text-red-600 dark:text-red-400 mb-2">Worst Tracks</h3>
+          <div className="space-y-2">
+            {worstTracks.map((track, index) => (
+              <TrackCard
+                key={track.trackId}
+                track={track}
+                rank={index + 1}
+                variant="worst"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+      <p className="text-xs text-gray-500 mt-2">Based on average points (minimum 2 races)</p>
+    </div>
+  );
+}
+
+function TrackCard({
+  track,
+  rank,
+  variant,
+}: {
+  track: {
+    trackName: string;
+    trackImageUrl: string | null;
+    races: number;
+    avgPoints: number;
+  };
+  rank: number;
+  variant: "best" | "worst";
+}) {
+  return (
+    <div
+      className={`flex items-center gap-3 p-2 rounded-lg ${
+        variant === "best"
+          ? "bg-green-50 dark:bg-green-900/20"
+          : "bg-red-50 dark:bg-red-900/20"
+      }`}
+    >
+      <span className="text-lg font-bold text-gray-400 w-6">{rank}</span>
+      {track.trackImageUrl ? (
+        <img
+          src={track.trackImageUrl}
+          alt={track.trackName}
+          className="w-16 h-10 object-cover rounded"
+        />
+      ) : (
+        <div className="w-16 h-10 bg-gray-200 dark:bg-gray-700 rounded flex items-center justify-center text-xs text-gray-400">
+          No img
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <div className="font-medium text-sm truncate">{track.trackName}</div>
+        <div className="text-xs text-gray-500">{track.races} races</div>
+      </div>
+      <div
+        className={`text-lg font-bold ${
+          variant === "best"
+            ? "text-green-600 dark:text-green-400"
+            : "text-red-600 dark:text-red-400"
+        }`}
+      >
+        {track.avgPoints}
+      </div>
     </div>
   );
 }
