@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RoundStatus {
+  COMPLETED
+  HIDDEN
+}
+
+model Player {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  avatarUrl String?
+  createdAt DateTime @default(now())
+
+  roundPlayers RoundPlayer[]
+  raceResults  RaceResult[]
+
+  wonRounds Round[] @relation("RoundWinner")
+}
+
+model Track {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  imageUrl  String?
+  createdAt DateTime @default(now())
+
+  races Race[]
+}
+
+model Round {
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  status    RoundStatus @default(COMPLETED)
+
+  // optional: you can compute winner later, but storing it is convenient for leaderboard queries
+  winnerPlayerId String?
+  winnerPlayer   Player? @relation("RoundWinner", fields: [winnerPlayerId], references: [id])
+
+  roundPlayers RoundPlayer[]
+  races        Race[]
+}
+
+model RoundPlayer {
+  roundId  String
+  playerId String
+
+  round  Round  @relation(fields: [roundId], references: [id], onDelete: Cascade)
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@id([roundId, playerId])
+}
+
+model Race {
+  id         String  @id @default(cuid())
+  roundId    String
+  raceIndex  Int // 1-4 for normal races; overtime can be 5
+  isOvertime Boolean @default(false)
+  trackId    String
+
+  round   Round        @relation(fields: [roundId], references: [id], onDelete: Cascade)
+  track   Track        @relation(fields: [trackId], references: [id])
+  results RaceResult[]
+
+  @@unique([roundId, raceIndex])
+}
+
+model RaceResult {
+  raceId         String
+  playerId       String
+  finishPosition Int
+  pointsAwarded  Int? // for normal races: 5/3/2/1; overtime can be null if you decide OT just breaks tie
+
+  race   Race   @relation(fields: [raceId], references: [id], onDelete: Cascade)
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@id([raceId, playerId])
+}
