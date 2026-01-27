@@ -13,6 +13,12 @@ export default function Home() {
           Leaderboard
         </Link>
         <Link
+          href="/players"
+          className="px-8 py-4 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold text-lg text-center transition-colors"
+        >
+          Players
+        </Link>
+        <Link
           href="/enter"
           className="px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold text-lg text-center transition-colors"
         >
