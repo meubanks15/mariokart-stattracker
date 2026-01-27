@@ -7,6 +7,7 @@ datasource db {
 }
 
 enum RoundStatus {
+  DRAFT
   COMPLETED
   HIDDEN
 }
@@ -35,7 +36,7 @@ model Track {
 model Round {
   id        String      @id @default(cuid())
   createdAt DateTime    @default(now())
-  status    RoundStatus @default(COMPLETED)
+  status    RoundStatus @default(DRAFT)
 
   // optional: you can compute winner later, but storing it is convenient for leaderboard queries
   winnerPlayerId String?
