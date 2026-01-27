@@ -7,6 +7,12 @@ export default function Home() {
 
       <div className="flex flex-col sm:flex-row gap-4">
         <Link
+          href="/leaderboard"
+          className="px-8 py-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-semibold text-lg text-center transition-colors"
+        >
+          Leaderboard
+        </Link>
+        <Link
           href="/enter"
           className="px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold text-lg text-center transition-colors"
         >
