@@ -33,7 +33,7 @@ export async function GET() {
     },
   });
 
-  const leaderboard = players.map((player) => {
+  const leaderboard = players.map((player: typeof players[number]) => {
     // Only count completed rounds
     const completedRounds = player.roundPlayers.filter(
       (rp) => rp.round.status === "COMPLETED"
