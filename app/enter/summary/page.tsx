@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PointsDisplay } from "@/components/enter/PointsDisplay";
 import type { Round, Player } from "@/lib/types";
 
-export default function SummaryPage() {
+function SummaryPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const roundId = searchParams.get("roundId");
@@ -177,5 +177,13 @@ export default function SummaryPage() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function SummaryPage() {
+  return (
+    <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+      <SummaryPageContent />
+    </Suspense>
   );
 }

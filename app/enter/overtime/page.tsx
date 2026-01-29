@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { TrackSelector } from "@/components/enter/TrackSelector";
 import { PositionEntry } from "@/components/enter/PositionEntry";
 import { PointsDisplay } from "@/components/enter/PointsDisplay";
 import type { Round, Player } from "@/lib/types";
 
-export default function OvertimePage() {
+function OvertimePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const roundId = searchParams.get("roundId");
@@ -225,5 +225,13 @@ export default function OvertimePage() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function OvertimePage() {
+  return (
+    <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+      <OvertimePageContent />
+    </Suspense>
   );
 }

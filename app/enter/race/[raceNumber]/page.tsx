@@ -1,18 +1,17 @@
 "use client";
 
-import { useState, useEffect, useCallback, use } from "react";
+import { useState, useEffect, useCallback, use, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { TrackSelector } from "@/components/enter/TrackSelector";
 import { PositionEntry } from "@/components/enter/PositionEntry";
 import { PointsDisplay } from "@/components/enter/PointsDisplay";
 import type { Round, Player } from "@/lib/types";
 
-export default function EnterRacePage({
-  params,
+function EnterRacePageContent({
+  raceNumber,
 }: {
-  params: Promise<{ raceNumber: string }>;
+  raceNumber: string;
 }) {
-  const { raceNumber } = use(params);
   const router = useRouter();
   const searchParams = useSearchParams();
   const roundId = searchParams.get("roundId");
@@ -226,5 +225,18 @@ export default function EnterRacePage({
         </button>
       </div>
     </div>
+  );
+}
+
+export default function EnterRacePage({
+  params,
+}: {
+  params: Promise<{ raceNumber: string }>;
+}) {
+  const { raceNumber } = use(params);
+  return (
+    <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+      <EnterRacePageContent raceNumber={raceNumber} />
+    </Suspense>
   );
 }

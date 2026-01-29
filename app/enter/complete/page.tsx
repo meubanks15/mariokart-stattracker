@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { PointsDisplay } from "@/components/enter/PointsDisplay";
 import type { Round, Player } from "@/lib/types";
 
-export default function CompletePage() {
+function CompletePageContent() {
   const searchParams = useSearchParams();
   const roundId = searchParams.get("roundId");
 
@@ -119,5 +119,13 @@ export default function CompletePage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function CompletePage() {
+  return (
+    <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+      <CompletePageContent />
+    </Suspense>
   );
 }
