@@ -112,38 +112,47 @@ function EnterRacePageContent({
   };
 
   if (loading) {
-    return <div className="text-center py-8">Loading...</div>;
+    return (
+      <div className="mk-card p-8 text-center">
+        <div className="text-xl font-bold text-white">Loading Race {raceIndex}...</div>
+        <div className="mt-2 text-4xl animate-bounce inline-block">🏎️</div>
+      </div>
+    );
   }
 
   if (error && !round) {
     return (
-      <div className="text-center py-8">
-        <p className="text-red-500 mb-4">{error}</p>
+      <div className="mk-card p-8 text-center">
+        <p className="text-red-400 text-xl font-bold mb-4">{error}</p>
         <button
           onClick={() => router.push("/enter")}
-          className="text-blue-500 hover:underline"
+          className="mk-button px-6 py-3"
         >
-          Start a new round
+          Start New Round
         </button>
       </div>
     );
   }
 
   if (!round) {
-    return <div className="text-center py-8">Round not found</div>;
+    return (
+      <div className="mk-card p-8 text-center">
+        <div className="text-xl font-bold text-white">Round not found</div>
+      </div>
+    );
   }
 
   // Check if we can enter this race
   const completedRaces = round.races.filter((r) => !r.isOvertime).length;
   if (raceIndex > completedRaces + 1) {
     return (
-      <div className="text-center py-8">
-        <p className="text-gray-500 mb-4">
-          Please complete race {completedRaces + 1} first.
+      <div className="mk-card p-8 text-center">
+        <p className="text-gray-400 mb-4 text-lg">
+          Please complete Race {completedRaces + 1} first.
         </p>
         <button
           onClick={() => router.push(`/enter/race/${completedRaces + 1}?roundId=${roundId}`)}
-          className="text-blue-500 hover:underline"
+          className="mk-button mk-button-blue px-6 py-3"
         >
           Go to Race {completedRaces + 1}
         </button>
@@ -153,16 +162,22 @@ function EnterRacePageContent({
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold">Race {raceIndex}</h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">
-          Select a track and enter finish positions.
+      {/* Race header */}
+      <div className="text-center">
+        <h1 className="text-3xl font-black text-white flex items-center justify-center gap-3"
+            style={{ textShadow: "3px 3px 0 rgba(0,0,0,0.5)" }}>
+          <span className="text-4xl">🏎️</span>
+          RACE {raceIndex}
+          <span className="text-4xl">🏎️</span>
+        </h1>
+        <p className="text-gray-400 mt-2 font-medium">
+          Select a course and enter finish positions
         </p>
       </div>
 
       {/* Current standings */}
       {round.races.length > 0 && (
-        <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+        <div className="mk-card p-4">
           <PointsDisplay players={players} races={round.races} />
         </div>
       )}
@@ -186,12 +201,16 @@ function EnterRacePageContent({
       )}
 
       {error && (
-        <div className="p-4 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg">
-          {error}
+        <div className="mk-card p-4 border-2 border-red-500 bg-red-500/20">
+          <div className="flex items-center gap-2 text-red-300 font-bold">
+            <span className="text-xl">⚠️</span>
+            {error}
+          </div>
         </div>
       )}
 
-      <div className="flex justify-between">
+      {/* Navigation */}
+      <div className="flex justify-between pt-4">
         <button
           onClick={() => {
             if (raceIndex === 1) {
@@ -200,7 +219,7 @@ function EnterRacePageContent({
               router.push(`/enter/race/${raceIndex - 1}?roundId=${roundId}`);
             }
           }}
-          className="px-6 py-3 rounded-lg font-semibold border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
+          className="mk-button px-6 py-3"
         >
           Back
         </button>
@@ -209,19 +228,28 @@ function EnterRacePageContent({
           onClick={handleSaveRace}
           disabled={!canSave || saving}
           className={`
-            px-6 py-3 rounded-lg font-semibold transition-all
+            px-8 py-3 rounded-xl font-bold uppercase tracking-wide transition-all
             ${canSave && !saving
-              ? "bg-blue-500 hover:bg-blue-600 text-white"
-              : "bg-gray-200 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
+              ? "mk-button mk-button-blue"
+              : "bg-gray-700 border-3 border-gray-600 text-gray-500 cursor-not-allowed"
             }
           `}
+          style={canSave && !saving ? {} : { boxShadow: "0 4px 0 #374151" }}
         >
-          {saving
-            ? "Saving..."
-            : raceIndex < 4
-              ? "Save & Next Race"
-              : "Save & View Summary"
-          }
+          {saving ? (
+            <span className="flex items-center gap-2">
+              <span className="animate-spin">🏎️</span>
+              Saving...
+            </span>
+          ) : raceIndex < 4 ? (
+            <span className="flex items-center gap-2">
+              Next Race <span>→</span>
+            </span>
+          ) : (
+            <span className="flex items-center gap-2">
+              <span>🏁</span> Finish
+            </span>
+          )}
         </button>
       </div>
     </div>
@@ -235,7 +263,12 @@ export default function EnterRacePage({
 }) {
   const { raceNumber } = use(params);
   return (
-    <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+    <Suspense fallback={
+      <div className="mk-card p-8 text-center">
+        <div className="text-xl font-bold text-white">Loading...</div>
+        <div className="mt-2 text-4xl animate-bounce inline-block">🏎️</div>
+      </div>
+    }>
       <EnterRacePageContent raceNumber={raceNumber} />
     </Suspense>
   );

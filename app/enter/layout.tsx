@@ -11,19 +11,19 @@ function ProgressStepperInner() {
 
   // Determine current step
   const steps = [
-    { label: "Players", path: "/enter", active: pathname === "/enter" },
-    { label: "Race 1", path: "/enter/race/1", active: pathname === "/enter/race/1" },
-    { label: "Race 2", path: "/enter/race/2", active: pathname === "/enter/race/2" },
-    { label: "Race 3", path: "/enter/race/3", active: pathname === "/enter/race/3" },
-    { label: "Race 4", path: "/enter/race/4", active: pathname === "/enter/race/4" },
-    { label: "Summary", path: "/enter/summary", active: pathname === "/enter/summary" },
+    { label: "Players", path: "/enter", emoji: "👥" },
+    { label: "Race 1", path: "/enter/race/1", emoji: "1️⃣" },
+    { label: "Race 2", path: "/enter/race/2", emoji: "2️⃣" },
+    { label: "Race 3", path: "/enter/race/3", emoji: "3️⃣" },
+    { label: "Race 4", path: "/enter/race/4", emoji: "4️⃣" },
+    { label: "Finish", path: "/enter/summary", emoji: "🏁" },
   ];
 
   // Find current step index
-  const currentIndex = steps.findIndex((s) => s.active);
+  const currentIndex = steps.findIndex((s) => pathname === s.path || pathname.startsWith(s.path + "/"));
 
   return (
-    <div className="flex items-center justify-center gap-2 py-4 overflow-x-auto">
+    <div className="flex items-center justify-center gap-1 sm:gap-2 py-4 overflow-x-auto px-2">
       {steps.map((step, index) => {
         const isComplete = currentIndex > index;
         const isCurrent = index === currentIndex;
@@ -32,31 +32,36 @@ function ProgressStepperInner() {
         const content = (
           <div
             className={`
-              flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all
+              flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all
               ${isCurrent
-                ? "bg-blue-500 text-white"
+                ? "bg-gradient-to-b from-blue-400 to-blue-600 text-white border-2 border-blue-300 shadow-lg"
                 : isComplete
-                  ? "bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300"
-                  : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+                  ? "bg-gradient-to-b from-green-400 to-green-600 text-white border-2 border-green-300"
+                  : "bg-gradient-to-b from-gray-600 to-gray-700 text-gray-400 border-2 border-gray-500"
               }
             `}
+            style={{
+              boxShadow: isCurrent ? "0 4px 0 #1e40af, 0 6px 10px rgba(0,0,0,0.3)" :
+                         isComplete ? "0 3px 0 #166534" : "0 3px 0 #374151"
+            }}
           >
-            {isComplete && (
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            )}
-            <span>{step.label}</span>
+            <span className="text-base sm:text-lg">{isComplete ? "✓" : step.emoji}</span>
+            <span className="hidden sm:inline">{step.label}</span>
           </div>
         );
 
         return (
-          <div key={step.path} className="flex items-center gap-2">
+          <div key={step.path} className="flex items-center gap-1 sm:gap-2">
             {index > 0 && (
-              <div className={`w-4 h-0.5 ${isComplete || isCurrent ? "bg-blue-300" : "bg-gray-300 dark:bg-gray-600"}`} />
+              <div className={`w-2 sm:w-6 h-1 rounded-full ${
+                isComplete ? "bg-green-400" :
+                isCurrent ? "bg-blue-400" : "bg-gray-600"
+              }`} />
             )}
             {canNavigate ? (
-              <Link href={`${step.path}?roundId=${roundId}`}>{content}</Link>
+              <Link href={`${step.path}?roundId=${roundId}`} className="hover:scale-105 transition-transform">
+                {content}
+              </Link>
             ) : (
               content
             )}
@@ -69,7 +74,11 @@ function ProgressStepperInner() {
 
 function ProgressStepper() {
   return (
-    <Suspense fallback={<div className="py-4 text-center text-gray-500">Loading...</div>}>
+    <Suspense fallback={
+      <div className="py-4 flex justify-center">
+        <div className="text-gray-400 font-bold">Loading...</div>
+      </div>
+    }>
       <ProgressStepperInner />
     </Suspense>
   );
@@ -81,18 +90,29 @@ export default function EnterLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen">
-      <header className="border-b dark:border-gray-800">
+    <div className="min-h-screen checkered-bg">
+      <header className="mk-header">
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex items-center justify-between py-4">
-            <Link href="/" className="text-xl font-bold">
+            <Link href="/" className="text-xl font-bold text-white"
+                  style={{ textShadow: "2px 2px 0 rgba(0,0,0,0.3)" }}>
               MK Stats
             </Link>
-            <h1 className="text-lg font-semibold">Enter Round</h1>
+            <h1 className="text-lg font-bold text-white uppercase tracking-wide flex items-center gap-2"
+                style={{ textShadow: "2px 2px 0 rgba(0,0,0,0.3)" }}>
+              <span>🏎️</span> Grand Prix
+            </h1>
           </div>
-          <ProgressStepper />
         </div>
       </header>
+
+      {/* Progress stepper */}
+      <div className="bg-gradient-to-b from-gray-900/50 to-transparent border-b border-gray-700/50">
+        <div className="max-w-4xl mx-auto">
+          <ProgressStepper />
+        </div>
+      </div>
+
       <main className="max-w-4xl mx-auto px-4 py-6">{children}</main>
     </div>
   );

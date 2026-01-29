@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git commit:*)",
+      "Bash(git add:*)",
+      "Bash(git push)",
+      "Bash(tree:*)",
+      "Bash(npx prisma migrate:*)",
+      "Bash(npx dotenv:*)",
+      "Bash(npm install:*)",
+      "Bash(npx prisma db push:*)",
+      "Bash(npx tsc --noEmit)",
+      "Bash(npx prisma generate)",
+      "Bash(npm run dev:*)",
+      "WebFetch(domain:www.prisma.io)",
+      "Bash(npx prisma db seed:*)",
+      "Bash(npm run build:*)",
+      "Bash(git restore:*)"
+    ]
+  }
+}

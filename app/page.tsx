@@ -2,34 +2,56 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-4">
-      <h1 className="text-4xl font-bold text-center">Mario Kart Stats Tracker</h1>
+    <main className="min-h-screen checkered-bg flex flex-col items-center justify-center gap-8 p-4">
+      {/* Title */}
+      <div className="text-center">
+        <h1 className="text-5xl sm:text-6xl font-black rainbow-text drop-shadow-lg mb-2">
+          MARIO KART
+        </h1>
+        <p className="text-2xl sm:text-3xl font-bold text-white tracking-wider"
+           style={{ textShadow: "3px 3px 0 rgba(0,0,0,0.5)" }}>
+          STATS TRACKER
+        </p>
+      </div>
 
-      <div className="flex flex-col sm:flex-row gap-4">
+      {/* Menu buttons */}
+      <div className="flex flex-col gap-4 w-full max-w-md">
         <Link
           href="/leaderboard"
-          className="px-8 py-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-semibold text-lg text-center transition-colors"
+          className="mk-button mk-button-yellow px-8 py-5 text-xl text-center flex items-center justify-center gap-3"
         >
+          <span className="text-2xl">🏆</span>
           Leaderboard
         </Link>
         <Link
           href="/players"
-          className="px-8 py-4 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold text-lg text-center transition-colors"
+          className="mk-button mk-button-green px-8 py-5 text-xl text-center flex items-center justify-center gap-3"
         >
+          <span className="text-2xl">👤</span>
           Players
         </Link>
         <Link
           href="/enter"
-          className="px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold text-lg text-center transition-colors"
+          className="mk-button mk-button-blue px-8 py-5 text-xl text-center flex items-center justify-center gap-3"
         >
+          <span className="text-2xl">🏁</span>
           Enter Round
         </Link>
         <Link
           href="/admin"
-          className="px-8 py-4 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg font-semibold text-lg text-center transition-colors"
+          className="mk-button px-8 py-5 text-xl text-center flex items-center justify-center gap-3"
         >
+          <span className="text-2xl">⚙️</span>
           Admin
         </Link>
+      </div>
+
+      {/* Decorative element */}
+      <div className="mt-4 text-4xl flex gap-2">
+        <span className="animate-bounce" style={{ animationDelay: "0ms" }}>🍄</span>
+        <span className="animate-bounce" style={{ animationDelay: "100ms" }}>⭐</span>
+        <span className="animate-bounce" style={{ animationDelay: "200ms" }}>🐢</span>
+        <span className="animate-bounce" style={{ animationDelay: "300ms" }}>🍌</span>
       </div>
     </main>
   );

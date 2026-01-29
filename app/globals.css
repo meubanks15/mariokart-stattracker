@@ -1,8 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Mario Kart Color Palette */
+  --mk-red: #E52521;
+  --mk-blue: #049CD8;
+  --mk-yellow: #FBD000;
+  --mk-green: #43B047;
+  --mk-orange: #F5821F;
+  --mk-purple: #7B4FD3;
+
+  /* UI Colors */
+  --background: #1a1a2e;
+  --background-card: #16213e;
+  --background-card-hover: #1f2b4d;
+  --foreground: #ffffff;
+  --foreground-muted: #a0aec0;
+
+  /* Borders */
+  --border-color: #2d3a5a;
+  --border-glow: rgba(251, 208, 0, 0.6);
 }
 
 @theme inline {
@@ -12,15 +28,238 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+/* Checkered pattern background utility */
+.checkered-bg {
+  background-image:
+    linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255,255,255,0.03) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.03) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.03) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+/* Mario Kart style card */
+.mk-card {
+  background: linear-gradient(180deg, #1e2a4a 0%, #16213e 100%);
+  border: 3px solid #3d4f7a;
+  border-radius: 16px;
+  box-shadow:
+    0 4px 0 #0d1525,
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.mk-card:hover {
+  border-color: var(--mk-yellow);
+  box-shadow:
+    0 4px 0 #0d1525,
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(251, 208, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Mario Kart style button */
+.mk-button {
+  background: linear-gradient(180deg, #E52521 0%, #b81d1a 100%);
+  border: 3px solid #ff6b68;
+  border-bottom-color: #8a1815;
+  border-radius: 12px;
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 4px 0 #6b1210,
+    0 6px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.1s ease;
+}
+
+.mk-button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 0 #6b1210,
+    0 8px 15px rgba(0, 0, 0, 0.4);
+}
+
+.mk-button:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 2px 0 #6b1210,
+    0 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+.mk-button-blue {
+  background: linear-gradient(180deg, #049CD8 0%, #037aa8 100%);
+  border-color: #4fc3f7;
+  border-bottom-color: #025a7d;
+  box-shadow:
+    0 4px 0 #024567,
+    0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.mk-button-blue:hover {
+  box-shadow:
+    0 6px 0 #024567,
+    0 8px 15px rgba(0, 0, 0, 0.4);
+}
+
+.mk-button-yellow {
+  background: linear-gradient(180deg, #FBD000 0%, #d4a900 100%);
+  border-color: #ffe566;
+  border-bottom-color: #9c7f00;
+  color: #1a1a2e;
+  text-shadow: none;
+  box-shadow:
+    0 4px 0 #7a6200,
+    0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.mk-button-green {
+  background: linear-gradient(180deg, #43B047 0%, #358a38 100%);
+  border-color: #6fcf73;
+  border-bottom-color: #266828;
+  box-shadow:
+    0 4px 0 #1d4f1f,
+    0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Track/Player selection card */
+.mk-select-card {
+  background: linear-gradient(180deg, #1e2a4a 0%, #16213e 100%);
+  border: 3px solid #3d4f7a;
+  border-radius: 12px;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 0 #0d1525;
+}
+
+.mk-select-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--mk-yellow);
+  box-shadow:
+    0 8px 0 #0d1525,
+    0 0 25px rgba(251, 208, 0, 0.4);
+}
+
+.mk-select-card.selected {
+  border-color: var(--mk-yellow);
+  background: linear-gradient(180deg, #2a3a5a 0%, #1e2a4a 100%);
+  box-shadow:
+    0 4px 0 #0d1525,
+    0 0 30px rgba(251, 208, 0, 0.5),
+    inset 0 0 20px rgba(251, 208, 0, 0.1);
+}
+
+/* Rainbow text for titles */
+.rainbow-text {
+  background: linear-gradient(90deg,
+    var(--mk-red) 0%,
+    var(--mk-orange) 20%,
+    var(--mk-yellow) 40%,
+    var(--mk-green) 60%,
+    var(--mk-blue) 80%,
+    var(--mk-purple) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Position badges */
+.position-1st {
+  background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
+  color: #1a1a2e;
+  border: 2px solid #FFE44D;
+  text-shadow: none;
+}
+
+.position-2nd {
+  background: linear-gradient(180deg, #C0C0C0 0%, #A0A0A0 100%);
+  color: #1a1a2e;
+  border: 2px solid #E0E0E0;
+}
+
+.position-3rd {
+  background: linear-gradient(180deg, #CD7F32 0%, #A0522D 100%);
+  color: white;
+  border: 2px solid #DDA15E;
+}
+
+.position-4th {
+  background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+  color: white;
+  border: 2px solid #718096;
+}
+
+/* Header bar */
+.mk-header {
+  background: linear-gradient(180deg, #E52521 0%, #b81d1a 100%);
+  border-bottom: 4px solid #6b1210;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Trophy glow */
+.trophy-glow {
+  filter: drop-shadow(0 0 10px rgba(251, 208, 0, 0.8));
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(251, 208, 0, 0.8)); }
+  50% { filter: drop-shadow(0 0 20px rgba(251, 208, 0, 1)); }
+}
+
+/* Item box style container */
+.item-box {
+  background: linear-gradient(180deg, #3d4f7a 0%, #2d3a5a 100%);
+  border: 3px solid #5d6f9a;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #16213e;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3d4f7a 0%, #2d3a5a 100%);
+  border-radius: 6px;
+  border: 2px solid #16213e;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #4d5f8a 0%, #3d4a6a 100%);
+}
+
+/* Input styling */
+.mk-input {
+  background: #0d1525;
+  border: 3px solid #3d4f7a;
+  border-radius: 8px;
+  color: white;
+  transition: all 0.15s ease;
+}
+
+.mk-input:focus {
+  outline: none;
+  border-color: var(--mk-yellow);
+  box-shadow: 0 0 15px rgba(251, 208, 0, 0.3);
+}
+
+.mk-input::placeholder {
+  color: #5d6f9a;
 }

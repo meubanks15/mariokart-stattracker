@@ -45,68 +45,94 @@ export function TrackSelector({
   }, [tracks, search, excludeTrackIds]);
 
   if (loading) {
-    return <div className="text-center py-8">Loading tracks...</div>;
+    return (
+      <div className="mk-card p-8 text-center">
+        <div className="text-xl font-bold text-white">Loading Courses...</div>
+        <div className="mt-2 text-4xl animate-spin inline-block">🏎️</div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-center py-8 text-red-500">{error}</div>;
+    return (
+      <div className="mk-card p-8 text-center">
+        <div className="text-xl font-bold text-red-400">{error}</div>
+      </div>
+    );
   }
 
   if (tracks.length === 0) {
-    return <div className="text-center py-8">No tracks found.</div>;
+    return (
+      <div className="mk-card p-8 text-center">
+        <div className="text-xl font-bold text-white">No courses found.</div>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="text-lg font-semibold">Select Track</h2>
+      {/* Header */}
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <h2 className="text-xl font-bold text-white flex items-center gap-2"
+            style={{ textShadow: "2px 2px 0 rgba(0,0,0,0.5)" }}>
+          <span className="text-2xl">🏁</span>
+          SELECT COURSE
+        </h2>
         <input
           type="text"
-          placeholder="Search tracks..."
+          placeholder="🔍 Search courses..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="px-3 py-2 border rounded-lg dark:bg-gray-800 dark:border-gray-600 flex-1 max-w-xs"
+          className="mk-input px-4 py-2 flex-1 max-w-xs"
         />
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-[60vh] overflow-y-auto">
-        {filteredTracks.map((track) => {
-          const isSelected = track.id === selectedTrackId;
+      {/* Track grid */}
+      <div className="mk-card p-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-[60vh] overflow-y-auto pr-2">
+          {filteredTracks.map((track) => {
+            const isSelected = track.id === selectedTrackId;
 
-          return (
-            <button
-              key={track.id}
-              onClick={() => onSelect(track.id)}
-              className={`
-                p-3 rounded-lg border-2 transition-all text-left
-                ${isSelected
-                  ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
-                  : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
-                }
-              `}
-            >
-              {track.imageUrl ? (
-                <img
-                  src={track.imageUrl}
-                  alt={track.name}
-                  className="w-full h-20 object-cover rounded mb-2"
-                />
-              ) : (
-                <div className="w-full h-20 bg-gray-200 dark:bg-gray-700 rounded mb-2 flex items-center justify-center text-gray-400">
-                  No image
-                </div>
-              )}
-              <span className="text-sm font-medium block truncate">{track.name}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {filteredTracks.length === 0 && (
-        <div className="text-center py-4 text-gray-500">
-          No tracks match your search.
+            return (
+              <button
+                key={track.id}
+                onClick={() => onSelect(track.id)}
+                className={`mk-select-card p-2 text-left ${isSelected ? "selected" : ""}`}
+              >
+                {track.imageUrl ? (
+                  <div className="relative">
+                    <img
+                      src={track.imageUrl}
+                      alt={track.name}
+                      className="w-full h-20 object-cover rounded-lg"
+                    />
+                    {isSelected && (
+                      <div className="absolute inset-0 bg-yellow-400/20 rounded-lg flex items-center justify-center">
+                        <span className="text-3xl trophy-glow">✓</span>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="w-full h-20 bg-gradient-to-b from-gray-600 to-gray-700 rounded-lg flex items-center justify-center">
+                    <span className="text-2xl">🏎️</span>
+                  </div>
+                )}
+                <span className="text-sm font-bold block truncate mt-2 text-white text-center"
+                      style={{ textShadow: "1px 1px 0 rgba(0,0,0,0.5)" }}>
+                  {track.name}
+                </span>
+              </button>
+            );
+          })}
         </div>
-      )}
+
+        {filteredTracks.length === 0 && (
+          <div className="text-center py-8">
+            <span className="text-4xl mb-2 block">🔍</span>
+            <span className="text-gray-400 font-medium">No courses match your search.</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

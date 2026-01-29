@@ -41,34 +41,54 @@ export default function EnterPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">New Round</h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">
-          Select 2-4 players to start a new round.
+      {/* Header */}
+      <div className="text-center">
+        <h1 className="text-3xl font-black text-white flex items-center justify-center gap-3"
+            style={{ textShadow: "3px 3px 0 rgba(0,0,0,0.5)" }}>
+          <span className="text-4xl">🏁</span>
+          NEW GRAND PRIX
+          <span className="text-4xl">🏁</span>
+        </h1>
+        <p className="text-gray-400 mt-2 font-medium">
+          Select 2-4 racers to compete
         </p>
       </div>
 
       <PlayerSelector onSelectionChange={setSelectedPlayerIds} />
 
       {error && (
-        <div className="p-4 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg">
-          {error}
+        <div className="mk-card p-4 border-2 border-red-500 bg-red-500/20">
+          <div className="flex items-center gap-2 text-red-300 font-bold">
+            <span className="text-xl">⚠️</span>
+            {error}
+          </div>
         </div>
       )}
 
-      <div className="flex justify-end">
+      <div className="flex justify-center pt-4">
         <button
           onClick={handleStartRound}
           disabled={!canStart || loading}
           className={`
-            px-6 py-3 rounded-lg font-semibold transition-all
+            px-10 py-4 rounded-xl font-bold text-xl uppercase tracking-wide transition-all
             ${canStart && !loading
-              ? "bg-blue-500 hover:bg-blue-600 text-white"
-              : "bg-gray-200 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
+              ? "mk-button mk-button-green"
+              : "bg-gray-700 border-3 border-gray-600 text-gray-500 cursor-not-allowed"
             }
           `}
+          style={canStart && !loading ? {} : { boxShadow: "0 4px 0 #374151" }}
         >
-          {loading ? "Creating..." : "Start Round"}
+          {loading ? (
+            <span className="flex items-center gap-2">
+              <span className="animate-spin">🏎️</span>
+              Starting...
+            </span>
+          ) : (
+            <span className="flex items-center gap-2">
+              <span>🚦</span>
+              Start Race!
+            </span>
+          )}
         </button>
       </div>
     </div>
