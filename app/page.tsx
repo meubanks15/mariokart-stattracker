@@ -46,13 +46,6 @@ export default function Home() {
         </Link>
       </div>
 
-      {/* Decorative element */}
-      <div className="mt-4 text-4xl flex gap-2">
-        <span className="animate-bounce" style={{ animationDelay: "0ms" }}>🍄</span>
-        <span className="animate-bounce" style={{ animationDelay: "100ms" }}>⭐</span>
-        <span className="animate-bounce" style={{ animationDelay: "200ms" }}>🐢</span>
-        <span className="animate-bounce" style={{ animationDelay: "300ms" }}>🍌</span>
-      </div>
     </main>
   );
 }
