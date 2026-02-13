@@ -236,31 +236,28 @@ export default function PlayerProfilePage({
               TRACK PERFORMANCE
             </h2>
             <div className="mk-card overflow-hidden">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-700 bg-gray-800/50">
-                    <th className="text-left py-3 px-4 text-gray-300 font-bold">Track</th>
-                    <th className="text-right py-3 px-2 text-gray-300 font-bold">Races</th>
-                    <th className="text-right py-3 px-2 text-gray-300 font-bold">1st</th>
-                    <th className="text-right py-3 px-4 text-gray-300 font-bold">Avg Pts</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {player.trackStats.slice(0, 10).map((track, index) => (
-                    <tr key={track.trackId} className={`border-b border-gray-700/50 ${index % 2 === 0 ? 'bg-gray-800/30' : ''}`}>
-                      <td className="py-3 px-4 text-white font-medium">{track.trackName}</td>
-                      <td className="text-right py-3 px-2 text-gray-300">{track.races}</td>
-                      <td className="text-right py-3 px-2 text-yellow-400 font-bold">{track.firstPlaces}</td>
-                      <td className="text-right py-3 px-4 text-white font-bold">{track.avgPoints}</td>
+              <div className="max-h-96 overflow-y-auto">
+                <table className="w-full text-sm">
+                  <thead className="sticky top-0 z-10">
+                    <tr className="border-b border-gray-700 bg-gray-800">
+                      <th className="text-left py-3 px-4 text-gray-300 font-bold">Track</th>
+                      <th className="text-right py-3 px-2 text-gray-300 font-bold">Races</th>
+                      <th className="text-right py-3 px-2 text-gray-300 font-bold">1st</th>
+                      <th className="text-right py-3 px-4 text-gray-300 font-bold">Avg Pts</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              {player.trackStats.length > 10 && (
-                <p className="text-sm text-gray-400 p-4 border-t border-gray-700">
-                  Showing top 10 of {player.trackStats.length} tracks
-                </p>
-              )}
+                  </thead>
+                  <tbody>
+                    {player.trackStats.map((track, index) => (
+                      <tr key={track.trackId} className={`border-b border-gray-700/50 ${index % 2 === 0 ? 'bg-gray-800/30' : ''}`}>
+                        <td className="py-3 px-4 text-white font-medium">{track.trackName}</td>
+                        <td className="text-right py-3 px-2 text-gray-300">{track.races}</td>
+                        <td className="text-right py-3 px-2 text-yellow-400 font-bold">{track.firstPlaces}</td>
+                        <td className="text-right py-3 px-4 text-white font-bold">{track.avgPoints}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}

@@ -126,7 +126,7 @@ export async function GET(
       totalPoints: stats.totalPoints,
       avgPoints: stats.races > 0 ? Math.round((stats.totalPoints / stats.races) * 100) / 100 : 0,
     }))
-    .sort((a, b) => b.races - a.races);
+    .sort((a, b) => b.avgPoints - a.avgPoints);
 
   // Recent rounds (last 10 completed)
   const recentRounds = completedRounds
