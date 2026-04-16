@@ -1,6 +1,23 @@
 import Link from "next/link";
+import { prisma } from "@/lib/db";
 
-export default function Home() {
+export default async function Home() {
+  const [totalRoundParticipations, totalOvertimeParticipations] = await Promise.all([
+    prisma.roundPlayer.count({
+      where: { round: { status: "COMPLETED" } },
+    }),
+    prisma.raceResult.count({
+      where: {
+        race: {
+          isOvertime: true,
+          round: { status: "COMPLETED" },
+        },
+      },
+    }),
+  ]);
+
+  const totalBeers = totalRoundParticipations * 2 + totalOvertimeParticipations;
+
   return (
     <main className="min-h-screen checkered-bg flex flex-col items-center justify-center gap-8 p-4">
       {/* Title */}
@@ -44,6 +61,13 @@ export default function Home() {
           <span className="text-2xl">⚙️</span>
           Admin
         </Link>
+      </div>
+
+      {/* Beer Counter */}
+      <div className="mk-card px-8 py-4 text-center">
+        <p className="text-xl font-bold text-white">
+          🍺 Beers Consumed: {totalBeers}
+        </p>
       </div>
 
     </main>
